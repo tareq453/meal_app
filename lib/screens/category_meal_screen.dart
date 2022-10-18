@@ -3,25 +3,33 @@ import '../widgets/meal_item.dart';
 import '../models/dummy_data.dart';
 import '../models/meal.dart';
 
-class CategoryMealScreen extends StatelessWidget {
+class CategoryMealScreen extends StatefulWidget {
   static const String route = "/category_meal";
-  // final String categoryId;
-  // final String categoryTitle;
-  // const CategoryMealScreen(
-  //     {Key? key, required this.categoryId, required this.categoryTitle})
-  //     : super(key: key);
+
+  const CategoryMealScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<CategoryMealScreen> createState() => _CategoryMealScreenState();
+}
+
+class _CategoryMealScreenState extends State<CategoryMealScreen> {
+  // final String categoryId;
+
+  @override
+  void initState() {
     final arg =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+    ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     String? cateogryTitle = arg["title"];
     String? cateogryId = arg["id"];
 
     List<Meal> mealList = DUMMY_MEALS.where((meal) {
-     return meal.categories.contains(cateogryId);
+      return meal.categories.contains(cateogryId);
     },).toList();
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(cateogryTitle!)),
       body: Center(
@@ -35,4 +43,5 @@ class CategoryMealScreen extends StatelessWidget {
       ),
     );
   }
+
 }
