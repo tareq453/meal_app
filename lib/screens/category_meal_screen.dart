@@ -17,6 +17,12 @@ class _CategoryMealScreenState extends State<CategoryMealScreen> {
 
   @override
   void initState() {
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final arg =
     ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     String? cateogryTitle = arg["title"];
@@ -25,11 +31,6 @@ class _CategoryMealScreenState extends State<CategoryMealScreen> {
     List<Meal> mealList = DUMMY_MEALS.where((meal) {
       return meal.categories.contains(cateogryId);
     },).toList();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(cateogryTitle!)),
       body: Center(
