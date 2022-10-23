@@ -9,6 +9,7 @@ class MealItem extends StatelessWidget {
   final int duration;
   final Complexity complexity;
   final Affordability affordability;
+  // final Function handler;
 
   const MealItem(
       {Key? key,
@@ -33,7 +34,7 @@ class MealItem extends StatelessWidget {
     }
   }
 
- String get affordabilityText {
+  String get affordabilityText {
     switch (affordability) {
       case Affordability.AFFORDABLE:
         return "affordable";
@@ -45,15 +46,17 @@ class MealItem extends StatelessWidget {
         return "UnKown";
     }
   }
+
   void showDetails(BuildContext context) {
-      Navigator.of(context).pushNamed( MealDetailesScreen.route,arguments: id);
-    }
+    Navigator.of(context)
+        .pushNamed(MealDetailesScreen.route, arguments: id);
+        // .then((value) => handler(value as String));
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    
     return InkWell(
-      onTap: ()  => showDetails(context),
+      onTap: () => showDetails(context),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         elevation: 4,
@@ -99,17 +102,27 @@ class MealItem extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(Icons.schedule),
-                      const SizedBox(width: 6,),
+                      const SizedBox(
+                        width: 6,
+                      ),
                       Text("$duration min")
                     ],
                   ),
                   Row(
-                    children: [const Icon(Icons.work),const SizedBox(width: 6,), Text(complexityText)],
+                    children: [
+                      const Icon(Icons.work),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(complexityText)
+                    ],
                   ),
                   Row(
                     children: [
                       const Icon(Icons.attach_money),
-                      const SizedBox(width: 6,),
+                      const SizedBox(
+                        width: 6,
+                      ),
                       Text(affordabilityText)
                     ],
                   )

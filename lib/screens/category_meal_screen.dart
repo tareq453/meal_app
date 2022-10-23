@@ -6,7 +6,9 @@ import '../models/meal.dart';
 class CategoryMealScreen extends StatefulWidget {
   static const String route = "/category_meal";
 
-  const CategoryMealScreen({Key? key}) : super(key: key);
+  final List<Meal> availableMealList;
+
+  const CategoryMealScreen({Key? key,required this.availableMealList}) : super(key: key);
 
   @override
   State<CategoryMealScreen> createState() => _CategoryMealScreenState();
@@ -14,35 +16,62 @@ class CategoryMealScreen extends StatefulWidget {
 
 class _CategoryMealScreenState extends State<CategoryMealScreen> {
   // final String categoryId;
+  String? cateogryTitle;
+  String? cateogryId;
+  late List<Meal> mealList;
+  var _loadedInitData = false;
 
   @override
   void initState() {
-
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final arg =
-    ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    String? cateogryTitle = arg["title"];
-    String? cateogryId = arg["id"];
+  void didChangeDependencies() {
+    if(!_loadedInitData) {
+      final arg =
+      ModalRoute
+          .of(context)
+          ?.settings
+          .arguments as Map<String, String>;
+      cateogryTitle = arg["title"];
+      cateogryId = arg["id"];
+      mealList = widget.availableMealList.where(
+            (meal) {
+          return meal.categories.contains(cateogryId);
+        },
+      ).toList();
+      _loadedInitData = true;
+    }
+    super.didChangeDependencies();
+  }
 
-    List<Meal> mealList = DUMMY_MEALS.where((meal) {
-      return meal.categories.contains(cateogryId);
-    },).toList();
+  void removeItem(String mealId) {
+    print("mealId $mealList");
+    setState(() {
+      mealList.removeWhere((meal) => meal.id == mealId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(cateogryTitle!)),
       body: Center(
         child: ListView.builder(
           itemBuilder: (context, index) {
-           final meal = mealList[index];
-            return  MealItem(id: meal.id,title: meal.title, imageUrl: meal.imageUrl,duration: meal.duration, complexity: meal.complexity, affordability: meal.affordability);
+            final meal = mealList[index];
+            return MealItem(
+                id: meal.id,
+                title: meal.title,
+                imageUrl: meal.imageUrl,
+                duration: meal.duration,
+                complexity: meal.complexity,
+                affordability: meal.affordability);
           },
           itemCount: mealList.length,
         ),
       ),
     );
   }
-
 }
